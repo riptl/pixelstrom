@@ -24,7 +24,9 @@ Account inputs:
 Instruction data (big-endian)
 1. `x: i32`
 2. `y: i32`
-3. `rgb565: u16`
+3. `r: u8`
+4. `g: u8`
+5. `b: u8`
 
 ### Account: Chunk
 
@@ -32,7 +34,7 @@ Chunk accounts are PDAs.
 
 The PDA seeds list looks like this:
 - ASCII string `Chunk`
-- Big-endian 0x43484e4b and the big-endian i32 chunk coordinates (y, x).
+- Big-endian i32 chunk coordinates (y, x).
 
 ```python
 def chunk_seed(y, x):
