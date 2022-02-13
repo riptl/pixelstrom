@@ -3,8 +3,8 @@
 ## Rules
 
 - Free-for-all
-- Canvas consisting of 32x32 chunk (2048 bytes)
-- RGB565 bitmap
+- Canvas consisting of 32x32 chunk (3072 bytes)
+- RGB bitmap
 - Each transaction sets one pixel
 
 ## Program

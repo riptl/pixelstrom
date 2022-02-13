@@ -6,7 +6,7 @@
 
 #define CHUNK_DIMENSION 32
 #define CHUNK_PIXELS (CHUNK_DIMENSION * CHUNK_DIMENSION)
-#define PIXEL_SIZE 4
+#define PIXEL_SIZE 3
 #define ROW_SIZE (CHUNK_DIMENSION * PIXEL_SIZE)
 #define CHUNK_SIZE (CHUNK_PIXELS * PIXEL_SIZE)
 
@@ -52,11 +52,13 @@ inline static int32_t pixel_data_offset(int32_t offset_x, int32_t offset_y)
     return (offset_y * ROW_SIZE) + (offset_x * PIXEL_SIZE);
 }
 
-inline static void set_pixel(uint8_t* data, int32_t offset_x, int32_t offset_y, uint32_t color)
+inline static void set_pixel(uint8_t* data, int32_t offset_x, int32_t offset_y, uint8_t r, uint8_t g, uint8_t b)
 {
     sol_assert(bounds_check_offset(offset_x) && bounds_check_offset(offset_y));
     uint8_t* ptr = &data[pixel_data_offset(offset_x, offset_y)];
-    encode_u32(ptr, color);
+    ptr[0] = r;
+    ptr[1] = g;
+    ptr[2] = b;
 }
 
 // derive_chunk_address returns the account address of a chunk.
@@ -112,10 +114,12 @@ static uint64_t instruction_set_pixel(const SolPubkey* program_id, SolAccountInf
     // TODO Verify there's only one instruction.
 
     // Decode data.
-    sol_assert(data_len == 12);
+    sol_assert(data_len == (4 + 4 + 3));
     int32_t x = decode_i32(&data[0]);
     int32_t y = decode_i32(&data[4]);
-    uint32_t color = decode_i32(&data[8]);
+    uint8_t r = data[8];
+    uint8_t g = data[9];
+    uint8_t b = data[10];
 
     // Locate chunk.
     struct point point = coords_to_chunk(x, y);
@@ -125,7 +129,7 @@ static uint64_t instruction_set_pixel(const SolPubkey* program_id, SolAccountInf
     sol_assert(SolPubkey_same(chunk.key, &chunk_address));
 
     // Set pixel.
-    set_pixel(chunk.data, point.offset_x, point.offset_y, color);
+    set_pixel(chunk.data, point.offset_x, point.offset_y, r, g, b);
 
     return 1;
 }
