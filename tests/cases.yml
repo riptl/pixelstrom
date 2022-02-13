@@ -1,0 +1,27 @@
+---
+id: missing_instruction_data
+input:
+  instruction_data: []
+  accounts: []
+result:
+  instruction_count: 17
+  result: |-
+    Err(UserError(SyscallError(Panic("./src/canvas/canvas.c", 146, 0))))
+---
+id: unknown_instruction
+input:
+  instruction_data: [0x02]
+  accounts: []
+result:
+  instruction_count: 19
+  result: |-
+    Err(UserError(SyscallError(Panic("./src/canvas/canvas.c", 152, 0))))
+---
+id: set_pixel_wrong_accounts_num
+input:
+  instruction_data: [0x01]
+  accounts: []
+result:
+  instruction_count: 19
+  result: |-
+    Err(UserError(SyscallError(Panic("./src/canvas/canvas.c", 149, 0))))
