@@ -143,9 +143,10 @@ extern uint64_t entrypoint(const uint8_t* input)
         return ERROR_INVALID_ARGUMENT;
     }
 
-    sol_assert(params.data_len > 1);
+    sol_assert(params.data_len >= 1);
     switch (params.data[0]) {
     case INS_SET_PIXEL:
+        sol_assert(params.ka_num == 2);
         return instruction_set_pixel(params.program_id, accounts[0], accounts[1], params.data, params.data_len);
     default:
         sol_panic();
